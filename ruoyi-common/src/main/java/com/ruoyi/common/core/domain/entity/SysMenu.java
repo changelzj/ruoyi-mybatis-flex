@@ -5,6 +5,9 @@ import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.Table;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.domain.BaseEntity;
@@ -14,11 +17,13 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 
  * @author ruoyi
  */
+@Table("sys_menu")
 public class SysMenu extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 菜单ID */
+    @Id
     private Long menuId;
 
     /** 菜单名称 */

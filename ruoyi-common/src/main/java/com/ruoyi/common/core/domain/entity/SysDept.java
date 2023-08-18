@@ -6,6 +6,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.Table;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.domain.BaseEntity;
@@ -15,11 +18,13 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 
  * @author ruoyi
  */
+@Table("sys_dept")
 public class SysDept extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 部门ID */
+    @Id
     private Long deptId;
 
     /** 父部门ID */

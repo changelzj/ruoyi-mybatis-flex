@@ -3,6 +3,10 @@ package com.ruoyi.quartz.domain;
 import java.util.Date;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.KeyType;
+import com.mybatisflex.annotation.Table;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -18,19 +22,23 @@ import com.ruoyi.quartz.util.CronUtils;
  * 
  * @author ruoyi
  */
+@Table("sys_job")
 public class SysJob extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 任务ID */
     @Excel(name = "任务序号", cellType = ColumnType.NUMERIC)
+    @Id(keyType = KeyType.Auto)
     private Long jobId;
 
     /** 任务名称 */
+    @Id
     @Excel(name = "任务名称")
     private String jobName;
 
     /** 任务组名 */
+    @Id
     @Excel(name = "任务组名")
     private String jobGroup;
 

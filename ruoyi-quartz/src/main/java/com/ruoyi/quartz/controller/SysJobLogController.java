@@ -38,9 +38,7 @@ public class SysJobLogController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(SysJobLog sysJobLog)
     {
-        startPage();
-        List<SysJobLog> list = jobLogService.selectJobLogList(sysJobLog);
-        return getDataTable(list);
+        return jobLogService.selectJobLogPage(sysJobLog);
     }
 
     /**

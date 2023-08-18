@@ -1,6 +1,9 @@
 package com.ruoyi.generator.domain;
 
 import javax.validation.constraints.NotBlank;
+
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.Table;
 import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.utils.StringUtils;
 
@@ -9,11 +12,13 @@ import com.ruoyi.common.utils.StringUtils;
  * 
  * @author ruoyi
  */
+@Table("gen_table_column")
 public class GenTableColumn extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 编号 */
+    @Id
     private Long columnId;
 
     /** 归属表编号 */

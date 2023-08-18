@@ -2,6 +2,8 @@ package com.ruoyi.system.domain;
 
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.Table;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.annotation.Excel.ColumnType;
 import com.ruoyi.common.core.domain.BaseEntity;
@@ -11,11 +13,13 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 
  * @author ruoyi
  */
+@Table("sys_oper_log")
 public class SysOperLog extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 日志主键 */
+    @Id
     @Excel(name = "操作序号", cellType = ColumnType.NUMERIC)
     private Long operId;
 

@@ -3,6 +3,9 @@ package com.ruoyi.common.core.domain.entity;
 import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.*;
+
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.Table;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -17,11 +20,13 @@ import com.ruoyi.common.xss.Xss;
  * 
  * @author ruoyi
  */
+@Table("sys_user")
 public class SysUser extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 用户ID */
+    @Id
     @Excel(name = "用户序号", cellType = ColumnType.NUMERIC, prompt = "用户编号")
     private Long userId;
 

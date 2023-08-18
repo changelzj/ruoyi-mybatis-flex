@@ -1,6 +1,8 @@
 package com.ruoyi.quartz.service;
 
 import java.util.List;
+
+import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.quartz.domain.SysJobLog;
 
 /**
@@ -16,8 +18,9 @@ public interface ISysJobLogService
      * @param jobLog 调度日志信息
      * @return 调度任务日志集合
      */
-    public List<SysJobLog> selectJobLogList(SysJobLog jobLog);
+    TableDataInfo selectJobLogPage(SysJobLog jobLog);
 
+    List<SysJobLog> selectJobLogList(SysJobLog jobLog);
     /**
      * 通过调度任务日志ID查询调度信息
      * 

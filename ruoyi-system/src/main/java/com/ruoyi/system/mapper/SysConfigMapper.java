@@ -1,14 +1,25 @@
 package com.ruoyi.system.mapper;
 
 import java.util.List;
+import java.util.WeakHashMap;
+
+import com.mybatisflex.core.BaseMapper;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryWrapper;
+import com.ruoyi.common.core.page.PageDomain;
+import com.ruoyi.common.core.page.TableSupport;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.sql.SqlUtil;
 import com.ruoyi.system.domain.SysConfig;
+
+import static com.ruoyi.system.domain.table.Tables.SYS_CONFIG;
 
 /**
  * 参数配置 数据层
  * 
  * @author ruoyi
  */
-public interface SysConfigMapper
+public interface SysConfigMapper extends BaseMapper<SysConfig>
 {
     /**
      * 查询参数配置信息
@@ -31,8 +42,82 @@ public interface SysConfigMapper
      * 
      * @param config 参数配置信息
      * @return 参数配置集合
+     *
+     * <select id="selectConfigList" parameterType="SysConfig" resultMap="SysConfigResult">
+     *         <include refid="selectConfigVo"/>
+     *         <where>
+     * 			<if test="configName != null and configName != ''">
+     * 				AND config_name like concat('%', #{configName}, '%')
+     * 			</if>
+     * 			<if test="configType != null and configType != ''">
+     * 				AND config_type = #{configType}
+     * 			</if>
+     * 			<if test="configKey != null and configKey != ''">
+     * 				AND config_key like concat('%', #{configKey}, '%')
+     * 			</if>
+     * 			<if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+     * 				and date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+     * 			</if>
+     * 			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+     * 				and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+     * 			</if>
+     * 		</where>
+     *     </select>
      */
-    public List<SysConfig> selectConfigList(SysConfig config);
+     default List<SysConfig> selectConfigList(SysConfig config) {
+         QueryWrapper queryWrapper = QueryWrapper.create();
+
+         if (StringUtils.isNotEmpty(config.getConfigName())) {
+             queryWrapper.and(SYS_CONFIG.CONFIG_NAME.like(config.getConfigName()));
+         }
+         if (StringUtils.isNotEmpty(config.getConfigType())) {
+             queryWrapper.and(SYS_CONFIG.CONFIG_TYPE.eq(config.getConfigType()));
+         }
+         if (StringUtils.isNotEmpty(config.getConfigKey())) {
+             queryWrapper.and(SYS_CONFIG.CONFIG_KEY.like(config.getConfigKey()));
+         }
+
+         if (StringUtils.isNotEmpty((String) config.getParams().get("beginTime")) ) {
+             queryWrapper.and(SYS_CONFIG.CREATE_TIME.ge(config.getParams().get("beginTime")));
+         }
+         if (StringUtils.isNotEmpty((String) config.getParams().get("endTime")) ) {
+             queryWrapper.and(SYS_CONFIG.CREATE_TIME.le(config.getParams().get("endTime")));
+         }
+
+         return selectListByQuery(queryWrapper);
+     }
+
+    default Page<SysConfig> selectConfigPage(SysConfig config) {
+        QueryWrapper queryWrapper = QueryWrapper.create();
+        PageDomain pageDomain = TableSupport.buildPageRequest();
+
+        if (StringUtils.isNotEmpty(config.getConfigName())) {
+            queryWrapper.and(SYS_CONFIG.CONFIG_NAME.like(config.getConfigName()));
+        }
+        if (StringUtils.isNotEmpty(config.getConfigType())) {
+            queryWrapper.and(SYS_CONFIG.CONFIG_TYPE.eq(config.getConfigType()));
+        }
+        if (StringUtils.isNotEmpty(config.getConfigKey())) {
+            queryWrapper.and(SYS_CONFIG.CONFIG_KEY.like(config.getConfigKey()));
+        }
+
+        if (StringUtils.isNotEmpty((String) config.getParams().get("beginTime")) ) {
+            queryWrapper.and(SYS_CONFIG.CREATE_TIME.ge(config.getParams().get("beginTime")));
+        }
+        if (StringUtils.isNotEmpty((String) config.getParams().get("endTime")) ) {
+            queryWrapper.and(SYS_CONFIG.CREATE_TIME.le(config.getParams().get("endTime")));
+        }
+
+        if (StringUtils.isNotEmpty(pageDomain.getOrderBy())) {
+            String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
+            queryWrapper.orderBy(orderBy);
+        }
+
+        Page<SysConfig> page = paginate(pageDomain.getPageNum(), pageDomain.getPageSize(), queryWrapper);
+        return page;
+    }
+
+
 
     /**
      * 根据键名查询参数配置信息

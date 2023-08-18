@@ -1,5 +1,7 @@
 package com.ruoyi.system.domain;
 
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.Table;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -8,12 +10,15 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * 
  * @author ruoyi
  */
+@Table("sys_role_menu")
 public class SysRoleMenu
 {
     /** 角色ID */
+    @Id
     private Long roleId;
     
     /** 菜单ID */
+    @Id
     private Long menuId;
 
     public Long getRoleId()

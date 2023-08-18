@@ -3,6 +3,10 @@ package com.ruoyi.system.service.impl;
 import java.util.Collection;
 import java.util.List;
 import javax.annotation.PostConstruct;
+
+import com.mybatisflex.core.paginate.Page;
+import com.ruoyi.common.constant.HttpStatus;
+import com.ruoyi.common.core.page.TableDataInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.common.annotation.DataSource;
@@ -106,6 +110,12 @@ public class SysConfigServiceImpl implements ISysConfigService
     public List<SysConfig> selectConfigList(SysConfig config)
     {
         return configMapper.selectConfigList(config);
+    }
+
+    @Override
+    public TableDataInfo selectConfigPage(SysConfig config) {
+        Page<SysConfig> page = configMapper.selectConfigPage(config);
+        return new TableDataInfo(page.getRecords(), page.getTotalRow(), HttpStatus.SUCCESS, "成功");
     }
 
     /**

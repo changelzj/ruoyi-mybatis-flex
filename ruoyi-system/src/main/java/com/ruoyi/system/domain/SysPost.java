@@ -3,6 +3,9 @@ package com.ruoyi.system.domain;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.Table;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -14,11 +17,13 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 
  * @author ruoyi
  */
+@Table("sys_post")
 public class SysPost extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 岗位序号 */
+    @Id
     @Excel(name = "岗位序号", cellType = ColumnType.NUMERIC)
     private Long postId;
 

@@ -3,6 +3,9 @@ package com.ruoyi.generator.domain;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.Table;
 import org.apache.commons.lang3.ArrayUtils;
 import com.ruoyi.common.constant.GenConstants;
 import com.ruoyi.common.core.domain.BaseEntity;
@@ -13,11 +16,13 @@ import com.ruoyi.common.utils.StringUtils;
  * 
  * @author ruoyi
  */
+@Table("gen_table")
 public class GenTable extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 编号 */
+    @Id
     private Long tableId;
 
     /** 表名称 */

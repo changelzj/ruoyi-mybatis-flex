@@ -1,6 +1,10 @@
 package com.ruoyi.quartz.service.impl;
 
 import java.util.List;
+
+import com.mybatisflex.core.paginate.Page;
+import com.ruoyi.common.constant.HttpStatus;
+import com.ruoyi.common.core.page.TableDataInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.quartz.domain.SysJobLog;
@@ -28,6 +32,12 @@ public class SysJobLogServiceImpl implements ISysJobLogService
     public List<SysJobLog> selectJobLogList(SysJobLog jobLog)
     {
         return jobLogMapper.selectJobLogList(jobLog);
+    }
+
+    @Override
+    public TableDataInfo selectJobLogPage(SysJobLog jobLog) {
+        Page<SysJobLog> page = jobLogMapper.selectJobLogPage(jobLog);
+        return new TableDataInfo(page.getRecords(), page.getTotalRow(), HttpStatus.SUCCESS, "成功");
     }
 
     /**

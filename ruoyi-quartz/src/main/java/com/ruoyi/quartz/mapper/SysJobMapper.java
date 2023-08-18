@@ -3,7 +3,16 @@ package com.ruoyi.quartz.mapper;
 import java.util.List;
 
 import com.mybatisflex.core.BaseMapper;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryWrapper;
+import com.ruoyi.common.core.page.PageDomain;
+import com.ruoyi.common.core.page.TableSupport;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.sql.SqlUtil;
 import com.ruoyi.quartz.domain.SysJob;
+import com.ruoyi.quartz.domain.table.SysJobTableDef;
+
+import static com.ruoyi.quartz.domain.table.Tables.SYS_JOB;
 
 /**
  * 调度任务信息 数据层
@@ -18,7 +27,76 @@ public interface SysJobMapper extends BaseMapper<SysJob>
      * @param job 调度信息
      * @return 操作日志集合
      */
-    public List<SysJob> selectJobList(SysJob job);
+    /**
+     *         /**
+     *          * 	<select id="selectJobList" parameterType="SysJob" resultMap="SysJobResult">
+     *          * 		<include refid="selectJobVo"/>
+     *          * 		<where>
+     *          * 			<if test="jobName != null and jobName != ''">
+     *          * 				AND job_name like concat('%', #{jobName}, '%')
+     *          * 			</if>
+     *          * 			<if test="jobGroup != null and jobGroup != ''">
+     *          * 				AND job_group = #{jobGroup}
+     *          * 			</if>
+     *          * 			<if test="status != null and status != ''">
+     *          * 				AND status = #{status}
+     *          * 			</if>
+     *          * 			<if test="invokeTarget != null and invokeTarget != ''">
+     *          * 				AND invoke_target like concat('%', #{invokeTarget}, '%')
+     *          * 			</if>
+     *          * 		</where>
+     *          * 	</select>
+     *          */
+
+    default Page<SysJob> selectJobPage(SysJob job) {
+        PageDomain pageDomain = TableSupport.buildPageRequest();
+        QueryWrapper queryWrapper = QueryWrapper.create();
+
+        if (StringUtils.isNotEmpty(job.getJobName()) ) {
+            queryWrapper.and(SYS_JOB.JOB_NAME.eq(job.getJobName()));
+        }
+        if (StringUtils.isNotEmpty(job.getJobGroup()) ) {
+            queryWrapper.and(SYS_JOB.JOB_GROUP.eq(job.getJobGroup()));
+        }
+        if (StringUtils.isNotEmpty(job.getStatus()) ) {
+            queryWrapper.and(SYS_JOB.STATUS.eq(job.getStatus()));
+        }
+        if (StringUtils.isNotEmpty(job.getInvokeTarget()) ) {
+            queryWrapper.and(SYS_JOB.INVOKE_TARGET.like(job.getInvokeTarget()));
+        }
+
+        if (StringUtils.isNotEmpty(pageDomain.getOrderBy())) {
+            String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
+            queryWrapper.orderBy(orderBy);
+        }
+
+        Page<SysJob> page = paginate(pageDomain.getPageNum(), pageDomain.getPageSize(), queryWrapper);
+        return page;
+    }
+
+
+    default List<SysJob> selectJobList(SysJob job) {
+
+        QueryWrapper queryWrapper = QueryWrapper.create();
+
+        if (StringUtils.isNotEmpty(job.getJobName()) ) {
+            queryWrapper.and(SYS_JOB.JOB_NAME.eq(job.getJobName()));
+        }
+        if (StringUtils.isNotEmpty(job.getJobGroup()) ) {
+            queryWrapper.and(SYS_JOB.JOB_GROUP.eq(job.getJobGroup()));
+        }
+        if (StringUtils.isNotEmpty(job.getStatus()) ) {
+            queryWrapper.and(SYS_JOB.STATUS.eq(job.getStatus()));
+        }
+        if (StringUtils.isNotEmpty(job.getInvokeTarget()) ) {
+            queryWrapper.and(SYS_JOB.INVOKE_TARGET.like(job.getInvokeTarget()));
+        }
+
+
+
+        List<SysJob> list = selectListByQuery( queryWrapper);
+        return list;
+    }
 
     /**
      * 查询所有调度任务

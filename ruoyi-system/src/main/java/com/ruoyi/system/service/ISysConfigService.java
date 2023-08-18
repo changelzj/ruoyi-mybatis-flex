@@ -1,6 +1,8 @@
 package com.ruoyi.system.service;
 
 import java.util.List;
+
+import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.system.domain.SysConfig;
 
 /**
@@ -40,6 +42,8 @@ public interface ISysConfigService
      * @return 参数配置集合
      */
     public List<SysConfig> selectConfigList(SysConfig config);
+
+    TableDataInfo selectConfigPage(SysConfig config);
 
     /**
      * 新增参数配置

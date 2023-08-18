@@ -3,6 +3,7 @@ package com.ruoyi.system.domain;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -15,12 +16,13 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 
  * @author ruoyi
  */
-@Table(value = "t_dept" )
+@Table(value = "sys_config" )
 public class SysConfig extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 参数主键 */
+    @Id
     @Excel(name = "参数主键", cellType = ColumnType.NUMERIC)
     private Long configId;
 

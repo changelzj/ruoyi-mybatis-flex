@@ -3,6 +3,8 @@ package com.ruoyi.quartz.service.impl;
 import java.util.List;
 import javax.annotation.PostConstruct;
 
+import com.mybatisflex.core.paginate.Page;
+import com.ruoyi.common.constant.HttpStatus;
 import com.ruoyi.common.core.page.PageDomain;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.page.TableSupport;
@@ -58,15 +60,15 @@ public class SysJobServiceImpl implements ISysJobService
      * @return
      */
     @Override
-    public TableDataInfo selectJobList(SysJob job)
+    public TableDataInfo selectJobPage(SysJob job)
     {
-        PageDomain pageDomain = TableSupport.buildPageRequest();
-        if (StringUtils.isNotEmpty(pageDomain.getOrderBy()))
-        {
-            String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
-            //PageHelper.orderBy(orderBy);
-        }
-       // jobMapper.pa
+        Page<SysJob> page = jobMapper.selectJobPage(job);
+        return new TableDataInfo(page.getRecords(), page.getTotalRow(), HttpStatus.SUCCESS, "成功");
+    }
+
+    @Override
+    public List<SysJob> selectJobList(SysJob job)
+    {
         return jobMapper.selectJobList(job);
     }
 

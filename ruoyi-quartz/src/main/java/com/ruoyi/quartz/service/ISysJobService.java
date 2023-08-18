@@ -20,7 +20,9 @@ public interface ISysJobService
      * @param job 调度信息
      * @return 调度任务集合
      */
-    public TableDataInfo selectJobList(SysJob job);
+    TableDataInfo selectJobPage(SysJob job);
+
+    List<SysJob> selectJobList(SysJob job);
 
     /**
      * 通过调度任务ID查询调度信息
