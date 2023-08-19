@@ -12,7 +12,7 @@ import com.ruoyi.common.utils.sql.SqlUtil;
 import com.ruoyi.quartz.domain.SysJob;
 import com.ruoyi.quartz.domain.table.SysJobTableDef;
 
-import static com.ruoyi.quartz.domain.table.Tables.SYS_JOB;
+import static com.ruoyi.quartz.domain.table.SysJobTableDef.SYS_JOB;
 
 /**
  * 调度任务信息 数据层

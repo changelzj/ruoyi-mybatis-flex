@@ -1,6 +1,8 @@
 package com.ruoyi.system.service;
 
 import java.util.List;
+
+import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.system.domain.SysNotice;
 
 /**
@@ -25,6 +27,8 @@ public interface ISysNoticeService
      * @return 公告集合
      */
     public List<SysNotice> selectNoticeList(SysNotice notice);
+
+    TableDataInfo selectNoticePage(SysNotice notice);
 
     /**
      * 新增公告

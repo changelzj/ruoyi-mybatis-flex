@@ -1,6 +1,10 @@
 package com.ruoyi.system.service.impl;
 
 import java.util.List;
+
+import com.mybatisflex.core.paginate.Page;
+import com.ruoyi.common.constant.HttpStatus;
+import com.ruoyi.common.core.page.TableDataInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.common.constant.UserConstants;
@@ -35,6 +39,12 @@ public class SysPostServiceImpl implements ISysPostService
     public List<SysPost> selectPostList(SysPost post)
     {
         return postMapper.selectPostList(post);
+    }
+
+    @Override
+    public TableDataInfo selectPostPage(SysPost post) {
+        Page<SysPost> page = postMapper.selectPostPage(post);
+        return new TableDataInfo(page.getRecords(), page.getTotalRow(), HttpStatus.SUCCESS, "成功");
     }
 
     /**

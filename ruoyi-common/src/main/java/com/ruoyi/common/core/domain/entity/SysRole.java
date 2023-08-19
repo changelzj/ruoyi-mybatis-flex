@@ -5,6 +5,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -61,12 +62,15 @@ public class SysRole extends BaseEntity
     private boolean flag = false;
 
     /** 菜单组 */
+    @Column(ignore = true)
     private Long[] menuIds;
 
+    @Column(ignore = true)
     /** 部门组（数据权限） */
     private Long[] deptIds;
 
     /** 角色菜单权限 */
+    @Column(ignore = true)
     private Set<String> permissions;
 
     public SysRole()

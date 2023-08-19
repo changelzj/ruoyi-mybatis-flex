@@ -1,6 +1,10 @@
 package com.ruoyi.system.service.impl;
 
 import java.util.List;
+
+import com.mybatisflex.core.paginate.Page;
+import com.ruoyi.common.constant.HttpStatus;
+import com.ruoyi.common.core.page.TableDataInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.SysNotice;
@@ -40,6 +44,12 @@ public class SysNoticeServiceImpl implements ISysNoticeService
     public List<SysNotice> selectNoticeList(SysNotice notice)
     {
         return noticeMapper.selectNoticeList(notice);
+    }
+
+    @Override
+    public TableDataInfo selectNoticePage(SysNotice notice) {
+        Page<SysNotice> page = noticeMapper.selectNoticePage(notice);
+        return new TableDataInfo(page.getRecords(), page.getTotalRow(), HttpStatus.SUCCESS, "成功");
     }
 
     /**

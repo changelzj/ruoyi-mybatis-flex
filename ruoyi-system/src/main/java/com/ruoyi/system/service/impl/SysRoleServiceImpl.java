@@ -1,10 +1,12 @@
 package com.ruoyi.system.service.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
+import com.mybatisflex.core.paginate.Page;
+import com.ruoyi.common.constant.HttpStatus;
+import com.ruoyi.common.core.page.PageDomain;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.core.page.TableSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +53,25 @@ public class SysRoleServiceImpl implements ISysRoleService
      * @param role 角色信息
      * @return 角色数据集合信息
      */
+    @Override
+    @DataScope(deptAlias = "d")
+    public TableDataInfo selectRolePage(SysRole role)
+    {
+        PageDomain pageDomain = TableSupport.buildPageRequest();
+        Map<String, Object> param = new HashMap<>();
+        param.put("roleId", role.getRoleId());
+        param.put("roleName", role.getRoleName());
+        param.put("status", role.getStatus());
+        param.put("roleKey", role.getRoleKey());
+
+        param.put("params.beginTime", role.getParams().get("beginTime"));
+        param.put("params.endTime", role.getParams().get("endTime"));
+        param.put("params.dataScope", role.getParams().get("dataScope"));
+
+        Page<SysRole> page = roleMapper.xmlPaginate("selectRolePage", Page.of(pageDomain.getPageNum(), pageDomain.getPageSize()), param);
+        return new TableDataInfo(page.getRecords(), page.getTotalRow(), HttpStatus.SUCCESS, "成功");
+    }
+
     @Override
     @DataScope(deptAlias = "d")
     public List<SysRole> selectRoleList(SysRole role)

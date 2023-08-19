@@ -3,8 +3,19 @@ package com.ruoyi.system.mapper;
 import java.util.List;
 
 import com.mybatisflex.core.BaseMapper;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryOrderByBuilder;
+import com.mybatisflex.core.query.QueryWrapper;
+import com.ruoyi.common.core.page.PageDomain;
+import com.ruoyi.common.core.page.TableSupport;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.sql.SqlUtil;
+import com.ruoyi.system.domain.SysConfig;
 import org.apache.ibatis.annotations.Param;
 import com.ruoyi.common.core.domain.entity.SysDictData;
+
+import static com.ruoyi.common.core.domain.entity.table.SysDictDataTableDef.SYS_DICT_DATA;
+import static com.ruoyi.system.domain.table.SysConfigTableDef.SYS_CONFIG;
 
 /**
  * 字典表 数据层
@@ -18,8 +29,65 @@ public interface SysDictDataMapper extends BaseMapper<SysDictData>
      * 
      * @param dictData 字典数据信息
      * @return 字典数据集合信息
+     *
+     * 	<select id="selectDictDataList" parameterType="SysDictData" resultMap="SysDictDataResult">
+     * 	    <include refid="selectDictDataVo"/>
+     * 		<where>
+     * 		    <if test="dictType != null and dictType != ''">
+     * 				AND dict_type = #{dictType}
+     * 			</if>
+     * 			<if test="dictLabel != null and dictLabel != ''">
+     * 				AND dict_label like concat('%', #{dictLabel}, '%')
+     * 			</if>
+     * 			<if test="status != null and status != ''">
+     * 				AND status = #{status}
+     * 			</if>
+     * 		</where>
+     * 		order by dict_sort asc
+     * 	</select>
      */
-    public List<SysDictData> selectDictDataList(SysDictData dictData);
+    default List<SysDictData> selectDictDataList(SysDictData dictData) {
+        QueryWrapper queryWrapper = QueryWrapper.create();
+
+        if (StringUtils.isNotEmpty(dictData.getDictType())) {
+            queryWrapper.and(SYS_DICT_DATA.DICT_TYPE.eq(dictData.getDictType()));
+        }
+        if (StringUtils.isNotEmpty(dictData.getDictLabel())) {
+            queryWrapper.and(SYS_DICT_DATA.DICT_LABEL.eq(dictData.getDictLabel()));
+        }
+        if (StringUtils.isNotEmpty(dictData.getStatus())) {
+            queryWrapper.and(SYS_DICT_DATA.STATUS.eq(dictData.getStatus()));
+        }
+        queryWrapper.orderBy(SYS_DICT_DATA.DICT_SORT.desc());
+        return selectListByQuery(queryWrapper);
+    }
+
+
+
+
+
+    default Page<SysDictData> selectDictDataPage(SysDictData dictData) {
+        PageDomain pageDomain = TableSupport.buildPageRequest();
+        QueryWrapper queryWrapper = QueryWrapper.create();
+
+        if (StringUtils.isNotEmpty(dictData.getDictType())) {
+            queryWrapper.and(SYS_DICT_DATA.DICT_TYPE.eq(dictData.getDictType()));
+        }
+        if (StringUtils.isNotEmpty(dictData.getDictLabel())) {
+            queryWrapper.and(SYS_DICT_DATA.DICT_LABEL.eq(dictData.getDictLabel()));
+        }
+        if (StringUtils.isNotEmpty(dictData.getStatus())) {
+            queryWrapper.and(SYS_DICT_DATA.STATUS.eq(dictData.getStatus()));
+        }
+
+        if (StringUtils.isNotEmpty(pageDomain.getOrderBy())) {
+            String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
+            queryWrapper.orderBy(orderBy);
+        }
+
+        Page<SysDictData> page = paginate(pageDomain.getPageNum(), pageDomain.getPageSize(), queryWrapper);
+        return page;
+    }
 
     /**
      * 根据字典类型查询字典数据

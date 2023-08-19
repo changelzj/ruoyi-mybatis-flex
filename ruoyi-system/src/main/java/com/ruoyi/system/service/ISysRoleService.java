@@ -3,6 +3,7 @@ package com.ruoyi.system.service;
 import java.util.List;
 import java.util.Set;
 import com.ruoyi.common.core.domain.entity.SysRole;
+import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.system.domain.SysUserRole;
 
 /**
@@ -18,7 +19,9 @@ public interface ISysRoleService
      * @param role 角色信息
      * @return 角色数据集合信息
      */
-    public List<SysRole> selectRoleList(SysRole role);
+    public TableDataInfo selectRolePage(SysRole role);
+
+    List<SysRole> selectRoleList(SysRole role);
 
     /**
      * 根据用户ID查询角色列表

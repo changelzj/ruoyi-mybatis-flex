@@ -12,7 +12,7 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.sql.SqlUtil;
 import com.ruoyi.system.domain.SysConfig;
 
-import static com.ruoyi.system.domain.table.Tables.SYS_CONFIG;
+import static com.ruoyi.system.domain.table.SysConfigTableDef.SYS_CONFIG;
 
 /**
  * 参数配置 数据层

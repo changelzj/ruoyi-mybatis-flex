@@ -1,6 +1,8 @@
 package com.ruoyi.system.service;
 
 import java.util.List;
+
+import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.system.domain.SysPost;
 
 /**
@@ -17,6 +19,8 @@ public interface ISysPostService
      * @return 岗位列表
      */
     public List<SysPost> selectPostList(SysPost post);
+
+    TableDataInfo selectPostPage(SysPost post);
 
     /**
      * 查询所有岗位

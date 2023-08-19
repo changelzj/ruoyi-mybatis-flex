@@ -1,9 +1,18 @@
 package com.ruoyi.system.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import javax.validation.Validator;
+
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryWrapper;
+import com.ruoyi.common.constant.HttpStatus;
+import com.ruoyi.common.core.page.PageDomain;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.core.page.TableSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +83,23 @@ public class SysUserServiceImpl implements ISysUserService
         return userMapper.selectUserList(user);
     }
 
+    @Override
+    public TableDataInfo selectUserPage(SysUser user) {
+        PageDomain pageDomain = TableSupport.buildPageRequest();
+        Map<String, Object> param = new HashMap<>();
+        param.put("userId", user.getUserId());
+        param.put("userName", user.getUserName());
+        param.put("status", user.getStatus());
+        param.put("phonenumber", user.getPhonenumber());
+        param.put("deptId", user.getDeptId());
+        param.put("params.beginTime", user.getParams().get("beginTime"));
+        param.put("params.endTime", user.getParams().get("endTime"));
+        param.put("params.dataScope", user.getParams().get("dataScope"));
+
+        Page<SysUser> page = userMapper.xmlPaginate("selectUserPage", Page.of(pageDomain.getPageNum(), pageDomain.getPageSize()), param);
+        return new TableDataInfo(page.getRecords(), page.getTotalRow(), HttpStatus.SUCCESS, "成功");
+    }
+
     /**
      * 根据条件分页查询已分配用户角色列表
      * 
@@ -82,9 +108,18 @@ public class SysUserServiceImpl implements ISysUserService
      */
     @Override
     @DataScope(deptAlias = "d", userAlias = "u")
-    public List<SysUser> selectAllocatedList(SysUser user)
+    public TableDataInfo selectAllocatedList(SysUser user)
     {
-        return userMapper.selectAllocatedList(user);
+        PageDomain pageDomain = TableSupport.buildPageRequest();
+
+        Map<String, Object> param = new HashMap<>();
+        param.put("userName", user.getUserName());
+        param.put("phonenumber", user.getPhonenumber());
+        param.put("params.dataScope", user.getParams().get("dataScope"));
+
+        Page<SysUser> page = userMapper.xmlPaginate("selectAllocatedList", Page.of(pageDomain.getPageNum(), pageDomain.getPageSize()), param);
+
+        return new TableDataInfo(page.getRecords(), page.getTotalRow(), HttpStatus.SUCCESS, "成功");
     }
 
     /**
@@ -95,9 +130,18 @@ public class SysUserServiceImpl implements ISysUserService
      */
     @Override
     @DataScope(deptAlias = "d", userAlias = "u")
-    public List<SysUser> selectUnallocatedList(SysUser user)
+    public TableDataInfo selectUnallocatedList(SysUser user)
     {
-        return userMapper.selectUnallocatedList(user);
+        PageDomain pageDomain = TableSupport.buildPageRequest();
+
+        Map<String, Object> param = new HashMap<>();
+        param.put("userName", user.getUserName());
+        param.put("phonenumber", user.getPhonenumber());
+        param.put("params.dataScope", user.getParams().get("dataScope"));
+
+        Page<SysUser> page = userMapper.xmlPaginate("selectUnallocatedList", Page.of(pageDomain.getPageNum(), pageDomain.getPageSize()), param);
+
+        return new TableDataInfo(page.getRecords(), page.getTotalRow(), HttpStatus.SUCCESS, "成功");
     }
 
     /**

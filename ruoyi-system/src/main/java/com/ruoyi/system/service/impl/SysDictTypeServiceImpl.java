@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
+
+import com.mybatisflex.core.paginate.Page;
+import com.ruoyi.common.constant.HttpStatus;
+import com.ruoyi.common.core.page.TableDataInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +55,13 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService
     public List<SysDictType> selectDictTypeList(SysDictType dictType)
     {
         return dictTypeMapper.selectDictTypeList(dictType);
+    }
+
+
+    @Override
+    public TableDataInfo selectDictTypePage(SysDictType dictType) {
+        Page<SysDictType> page = dictTypeMapper.selectDictTypePage(dictType);
+        return new TableDataInfo(page.getRecords(), page.getTotalRow(), HttpStatus.SUCCESS, "成功");
     }
 
     /**

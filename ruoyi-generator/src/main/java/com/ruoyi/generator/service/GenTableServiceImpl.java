@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
+import com.mybatisflex.core.paginate.Page;
+import com.ruoyi.common.constant.HttpStatus;
+import com.ruoyi.common.core.page.PageDomain;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.core.page.TableSupport;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.velocity.Template;
@@ -74,9 +81,10 @@ public class GenTableServiceImpl implements IGenTableService
      * @return 业务集合
      */
     @Override
-    public List<GenTable> selectGenTableList(GenTable genTable)
+    public TableDataInfo selectGenTableList(GenTable genTable)
     {
-        return genTableMapper.selectGenTableList(genTable);
+        Page<GenTable> page = genTableMapper.selectGenTableList(genTable);
+        return new TableDataInfo(page.getRecords(), page.getTotalRow(), HttpStatus.SUCCESS, "成功");
     }
 
     /**
@@ -86,9 +94,17 @@ public class GenTableServiceImpl implements IGenTableService
      * @return 数据库表集合
      */
     @Override
-    public List<GenTable> selectDbTableList(GenTable genTable)
+    public TableDataInfo selectDbTableList(GenTable genTable)
     {
-        return genTableMapper.selectDbTableList(genTable);
+         PageDomain pageDomain = TableSupport.buildPageRequest();
+         Map<String, Object> param = new HashMap<>();
+         param.put("tableName", genTable.getTableName());
+         param.put("tableComment", genTable.getTableComment());
+         param.put("params.beginTime", genTable.getParams().get("beginTime"));
+         param.put("params.endTime", genTable.getParams().get("endTime"));
+
+         Page<GenTable> page = genTableMapper.xmlPaginate("selectDbTableList", Page.of(pageDomain.getPageNum(), pageDomain.getPageSize()), param);
+         return new TableDataInfo(page.getRecords(), page.getTotalRow(), HttpStatus.SUCCESS, "成功");
     }
 
     /**

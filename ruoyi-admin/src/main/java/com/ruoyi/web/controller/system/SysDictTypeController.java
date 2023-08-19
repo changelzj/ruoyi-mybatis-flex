@@ -38,9 +38,7 @@ public class SysDictTypeController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(SysDictType dictType)
     {
-        startPage();
-        List<SysDictType> list = dictTypeService.selectDictTypeList(dictType);
-        return getDataTable(list);
+        return dictTypeService.selectDictTypePage(dictType);
     }
 
     @Log(title = "字典类型", businessType = BusinessType.EXPORT)

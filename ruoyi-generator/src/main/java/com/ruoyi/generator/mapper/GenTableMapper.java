@@ -1,9 +1,22 @@
 package com.ruoyi.generator.mapper;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.mybatisflex.core.BaseMapper;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryWrapper;
+import com.ruoyi.common.constant.HttpStatus;
+import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.common.core.page.PageDomain;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.core.page.TableSupport;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.sql.SqlUtil;
 import com.ruoyi.generator.domain.GenTable;
+
+import static com.ruoyi.generator.domain.table.GenTableTableDef.GEN_TABLE;
 
 /**
  * 业务 数据层
@@ -17,16 +30,55 @@ public interface GenTableMapper extends BaseMapper<GenTable>
      * 
      * @param genTable 业务信息
      * @return 业务集合
+     *
+     *     <select id="selectGenTableList" parameterType="GenTable" resultMap="GenTableResult">
+     * 		<include refid="selectGenTableVo"/>
+     * 		<where>
+     * 			<if test="tableName != null and tableName != ''">
+     * 				AND lower(table_name) like lower(concat('%', #{tableName}, '%'))
+     * 			</if>
+     * 			<if test="tableComment != null and tableComment != ''">
+     * 				AND lower(table_comment) like lower(concat('%', #{tableComment}, '%'))
+     * 			</if>
+     * 			<if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+     * 				AND date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+     * 			</if>
+     * 			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+     * 				AND date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+     * 			</if>
+     * 		</where>
+     * 	</select>
      */
-    public List<GenTable> selectGenTableList(GenTable genTable);
+    default Page<GenTable> selectGenTableList(GenTable genTable) {
+        QueryWrapper queryWrapper = QueryWrapper.create();
+        PageDomain pageDomain = TableSupport.buildPageRequest();
 
-    /**
-     * 查询据库列表
-     * 
-     * @param genTable 业务信息
-     * @return 数据库表集合
-     */
-    public List<GenTable> selectDbTableList(GenTable genTable);
+        if (StringUtils.isNotEmpty(genTable.getTableName())) {
+            queryWrapper.and(GEN_TABLE.TABLE_NAME.like(genTable.getTableName()));
+        }
+        if (StringUtils.isNotEmpty(genTable.getTableComment())) {
+            queryWrapper.and(GEN_TABLE.TABLE_COMMENT.like(genTable.getTableComment()));
+        }
+        if (StringUtils.isNotEmpty((String) genTable.getParams().get("beginTime")) ) {
+            queryWrapper.and(GEN_TABLE.CREATE_TIME.ge(genTable.getParams().get("beginTime")));
+        }
+        if (StringUtils.isNotEmpty((String) genTable.getParams().get("endTime")) ) {
+            queryWrapper.and(GEN_TABLE.CREATE_TIME.le(genTable.getParams().get("endTime")));
+        }
+
+
+
+        if (StringUtils.isNotEmpty(pageDomain.getOrderBy())) {
+            String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
+            queryWrapper.orderBy(orderBy);
+        }
+
+        Page<GenTable> page = paginate(pageDomain.getPageNum(), pageDomain.getPageSize(), queryWrapper);
+        return page;
+    }
+
+
+
 
     /**
      * 查询据库列表

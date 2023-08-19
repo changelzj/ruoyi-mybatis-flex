@@ -3,7 +3,17 @@ package com.ruoyi.system.mapper;
 import java.util.List;
 
 import com.mybatisflex.core.BaseMapper;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryWrapper;
+import com.ruoyi.common.core.page.PageDomain;
+import com.ruoyi.common.core.page.TableSupport;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.sql.SqlUtil;
+import com.ruoyi.system.domain.SysNotice;
 import com.ruoyi.system.domain.SysPost;
+
+import static com.ruoyi.system.domain.table.SysNoticeTableDef.SYS_NOTICE;
+import static com.ruoyi.system.domain.table.SysPostTableDef.SYS_POST;
 
 /**
  * 岗位信息 数据层
@@ -19,6 +29,46 @@ public interface SysPostMapper extends BaseMapper<SysPost>
      * @return 岗位数据集合
      */
     public List<SysPost> selectPostList(SysPost post);
+
+    /**
+     * 	<select id="selectPostList" parameterType="SysPost" resultMap="SysPostResult">
+     * 	    <include refid="selectPostVo"/>
+     * 		<where>
+     * 			<if test="postCode != null and postCode != ''">
+     * 				AND post_code like concat('%', #{postCode}, '%')
+     * 			</if>
+     * 			<if test="status != null and status != ''">
+     * 				AND status = #{status}
+     * 			</if>
+     * 			<if test="postName != null and postName != ''">
+     * 				AND post_name like concat('%', #{postName}, '%')
+     * 			</if>
+     * 		</where>
+     * 	</select>
+
+     */
+    default Page<SysPost> selectPostPage(SysPost post) {
+        QueryWrapper queryWrapper = QueryWrapper.create();
+        PageDomain pageDomain = TableSupport.buildPageRequest();
+
+        if (StringUtils.isNotEmpty(post.getPostCode())) {
+            queryWrapper.and(SYS_POST.POST_CODE.like(post.getPostCode()));
+        }
+        if (StringUtils.isNotEmpty(post.getStatus())) {
+            queryWrapper.and(SYS_POST.STATUS.eq(post.getStatus()));
+        }
+        if (StringUtils.isNotEmpty(post.getPostName())) {
+            queryWrapper.and(SYS_POST.POST_NAME.like(post.getPostName()));
+        }
+
+        if (StringUtils.isNotEmpty(pageDomain.getOrderBy())) {
+            String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
+            queryWrapper.orderBy(orderBy);
+        }
+
+        Page<SysPost> page = paginate(pageDomain.getPageNum(), pageDomain.getPageSize(), queryWrapper);
+        return page;
+    }
 
     /**
      * 查询所有岗位
