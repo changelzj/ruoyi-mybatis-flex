@@ -26,16 +26,32 @@ public interface SysConfigMapper extends BaseMapper<SysConfig>
      * 
      * @param config 参数配置信息
      * @return 参数配置信息
+     *
+     * 	<where>
+     * 			<if test="configId !=null">
+     * 				and config_id = #{configId}
+     * 			</if>
+     * 			<if test="configKey !=null and configKey != ''">
+     * 				and config_key = #{configKey}
+     * 			</if>
+     * 		</where>
      */
-    public SysConfig selectConfig(SysConfig config);
+    default SysConfig selectConfig(SysConfig config) {
+        return selectOneByCondition(SYS_CONFIG.CONFIG_ID.eq(config.getConfigId(), v -> v != null)
+                .and(SYS_CONFIG.CONFIG_KEY.eq(config.getConfigKey(), v -> StringUtils.isNotEmpty(v) )));
+    }
 
     /**
      * 通过ID查询配置
      * 
      * @param configId 参数ID
      * @return 参数配置信息
+     *
+     *  where config_key = #{configKey} limit 1
      */
-    public SysConfig selectConfigById(Long configId);
+    default SysConfig selectConfigById(Long configId) {
+        return selectOneById( configId );
+    }
 
     /**
      * 查询参数配置列表
@@ -129,7 +145,9 @@ public interface SysConfigMapper extends BaseMapper<SysConfig>
      * @param configKey 参数键名
      * @return 参数配置信息
      */
-    public SysConfig checkConfigKeyUnique(String configKey);
+    default public SysConfig checkConfigKeyUnique(String configKey) {
+        return selectOneByQuery( QueryWrapper.create().and(SYS_CONFIG.CONFIG_KEY.eq(configKey)).limit(1) );
+    }
 
     /**
      * 新增参数配置
