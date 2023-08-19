@@ -84,6 +84,7 @@ public class SysUserServiceImpl implements ISysUserService
     }
 
     @Override
+    @DataScope(deptAlias = "d", userAlias = "u")
     public TableDataInfo selectUserPage(SysUser user) {
         PageDomain pageDomain = TableSupport.buildPageRequest();
         Map<String, Object> param = new HashMap<>();
