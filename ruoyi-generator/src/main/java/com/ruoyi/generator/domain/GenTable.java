@@ -90,18 +90,23 @@ public class GenTable extends BaseEntity
     private String options;
 
     /** 树编码字段 */
+    @Column(ignore = true)
     private String treeCode;
 
     /** 树父编码字段 */
+    @Column(ignore = true)
     private String treeParentCode;
 
     /** 树名称字段 */
+    @Column(ignore = true)
     private String treeName;
 
     /** 上级菜单ID字段 */
+    @Column(ignore = true)
     private String parentMenuId;
 
     /** 上级菜单名称字段 */
+    @Column(ignore = true)
     private String parentMenuName;
 
     public Long getTableId()
