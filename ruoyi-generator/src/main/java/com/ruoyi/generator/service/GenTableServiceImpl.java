@@ -102,7 +102,7 @@ public class GenTableServiceImpl implements IGenTableService
          param.put("tableComment", genTable.getTableComment());
          param.put("params.beginTime", genTable.getParams().get("beginTime"));
          param.put("params.endTime", genTable.getParams().get("endTime"));
-
+// todo update
          Page<GenTable> page = genTableMapper.xmlPaginate("selectDbTableList", Page.of(pageDomain.getPageNum(), pageDomain.getPageSize()), param);
          return new TableDataInfo(page.getRecords(), page.getTotalRow(), HttpStatus.SUCCESS, "成功");
     }

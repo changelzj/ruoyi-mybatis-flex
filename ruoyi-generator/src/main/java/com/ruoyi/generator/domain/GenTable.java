@@ -4,6 +4,7 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
 import org.apache.commons.lang3.ArrayUtils;
@@ -73,13 +74,16 @@ public class GenTable extends BaseEntity
     private String genPath;
 
     /** 主键信息 */
+    @Column(ignore = true)
     private GenTableColumn pkColumn;
 
     /** 子表信息 */
+    @Column(ignore = true)
     private GenTable subTable;
 
     /** 表列信息 */
     @Valid
+    @Column(ignore = true)
     private List<GenTableColumn> columns;
 
     /** 其它生成选项 */

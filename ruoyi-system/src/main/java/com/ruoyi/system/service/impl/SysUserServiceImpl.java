@@ -92,9 +92,9 @@ public class SysUserServiceImpl implements ISysUserService
         param.put("status", user.getStatus());
         param.put("phonenumber", user.getPhonenumber());
         param.put("deptId", user.getDeptId());
-        param.put("params.beginTime", user.getParams().get("beginTime"));
-        param.put("params.endTime", user.getParams().get("endTime"));
-        param.put("params.dataScope", user.getParams().get("dataScope"));
+        param.put("beginTime", user.getParams().get("beginTime"));
+        param.put("endTime", user.getParams().get("endTime"));
+        param.put("dataScope", user.getParams().get("dataScope"));
 
         Page<SysUser> page = userMapper.xmlPaginate("selectUserPage", Page.of(pageDomain.getPageNum(), pageDomain.getPageSize()), param);
         return new TableDataInfo(page.getRecords(), page.getTotalRow(), HttpStatus.SUCCESS, "成功");
