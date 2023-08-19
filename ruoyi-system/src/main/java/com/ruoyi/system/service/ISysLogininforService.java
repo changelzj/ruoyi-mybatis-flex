@@ -1,6 +1,8 @@
 package com.ruoyi.system.service;
 
 import java.util.List;
+
+import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.system.domain.SysLogininfor;
 
 /**
@@ -25,6 +27,7 @@ public interface ISysLogininforService
      */
     public List<SysLogininfor> selectLogininforList(SysLogininfor logininfor);
 
+    TableDataInfo selectLogininforPage(SysLogininfor logininfor);
     /**
      * 批量删除系统登录日志
      * 

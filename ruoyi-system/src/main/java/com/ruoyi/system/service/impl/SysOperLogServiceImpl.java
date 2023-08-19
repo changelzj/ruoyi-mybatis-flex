@@ -1,6 +1,10 @@
 package com.ruoyi.system.service.impl;
 
 import java.util.List;
+
+import com.mybatisflex.core.paginate.Page;
+import com.ruoyi.common.constant.HttpStatus;
+import com.ruoyi.common.core.page.TableDataInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.SysOperLog;
@@ -39,6 +43,12 @@ public class SysOperLogServiceImpl implements ISysOperLogService
     public List<SysOperLog> selectOperLogList(SysOperLog operLog)
     {
         return operLogMapper.selectOperLogList(operLog);
+    }
+
+    @Override
+    public TableDataInfo selectOperLogPage(SysOperLog operLog) {
+        Page<SysOperLog> page = operLogMapper.selectOperLogPage(operLog);
+        return new TableDataInfo(page.getRecords(), page.getTotalRow(), HttpStatus.SUCCESS, "成功");
     }
 
     /**

@@ -1,6 +1,8 @@
 package com.ruoyi.system.service;
 
 import java.util.List;
+
+import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.system.domain.SysOperLog;
 
 /**
@@ -25,6 +27,7 @@ public interface ISysOperLogService
      */
     public List<SysOperLog> selectOperLogList(SysOperLog operLog);
 
+    TableDataInfo selectOperLogPage(SysOperLog operLog);
     /**
      * 批量删除系统操作日志
      * 

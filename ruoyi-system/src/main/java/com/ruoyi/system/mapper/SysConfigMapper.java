@@ -43,6 +43,10 @@ public interface SysConfigMapper extends BaseMapper<SysConfig>
      * @param config 参数配置信息
      * @return 参数配置集合
      *
+     *     select config_id, config_name, config_key, config_value, config_type,
+     *     create_by, create_time, update_by, update_time, remark
+     * 		from sys_config
+     *
      * <select id="selectConfigList" parameterType="SysConfig" resultMap="SysConfigResult">
      *         <include refid="selectConfigVo"/>
      *         <where>

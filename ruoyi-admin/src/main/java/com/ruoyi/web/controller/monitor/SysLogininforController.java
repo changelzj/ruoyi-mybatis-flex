@@ -39,10 +39,7 @@ public class SysLogininforController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(SysLogininfor logininfor)
     {
-        //startPage(); //todo
-        List<SysLogininfor> list = logininforService.selectLogininforList(logininfor);
-        //return getDataTable(list);
-        return null;
+        return  logininforService.selectLogininforPage(logininfor);
     }
 
     @Log(title = "登录日志", businessType = BusinessType.EXPORT)

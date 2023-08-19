@@ -67,7 +67,7 @@ public class SysRoleServiceImpl implements ISysRoleService
         param.put("beginTime", role.getParams().get("beginTime"));
         param.put("endTime", role.getParams().get("endTime"));
         param.put("dataScope", role.getParams().get("dataScope"));
-// todo update
+
         Page<SysRole> page = roleMapper.xmlPaginate("selectRolePage", Page.of(pageDomain.getPageNum(), pageDomain.getPageSize()), param);
         return new TableDataInfo(page.getRecords(), page.getTotalRow(), HttpStatus.SUCCESS, "成功");
     }
