@@ -28,6 +28,7 @@ public class BaseEntity implements Serializable
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(onInsertValue = "sysdate()")
     private Date createTime;
 
     /** 更新者 */
@@ -35,6 +36,7 @@ public class BaseEntity implements Serializable
 
     /** 更新时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(onUpdateValue = "sysdate()")
     private Date updateTime;
 
     /** 备注 */

@@ -105,6 +105,9 @@ mybatis-flex:
   typeAliasesPackage: com.ruoyi.**.domain
   # 配置mapper的扫描，找到所有的mapper.xml映射文件
   mapperLocations: classpath*:mapper/**/*Mapper.xml
+  global-config:
+    normal-value-of-logic-delete: 0
+    deleted-value-of-logic-delete: 2
 
 # Swagger配置
 swagger:

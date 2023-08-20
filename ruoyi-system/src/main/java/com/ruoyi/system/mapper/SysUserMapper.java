@@ -7,6 +7,8 @@ import com.mybatisflex.core.paginate.Page;
 import org.apache.ibatis.annotations.Param;
 import com.ruoyi.common.core.domain.entity.SysUser;
 
+import static com.ruoyi.common.core.domain.entity.table.SysUserTableDef.SYS_USER;
+
 /**
  * 用户表 数据层
  * 
@@ -45,8 +47,12 @@ public interface SysUserMapper extends BaseMapper<SysUser>
      * 
      * @param userName 用户名
      * @return 用户对象信息
+     *
+     * where u.user_name = #{userName} and u.del_flag = '0'
      */
-    public SysUser selectUserByUserName(String userName);
+    default SysUser selectUserByUserName(String userName) {
+        return selectOneByCondition(SYS_USER.USER_NAME.eq(userName));
+    }
 
     /**
      * 通过用户ID查询用户
@@ -54,7 +60,9 @@ public interface SysUserMapper extends BaseMapper<SysUser>
      * @param userId 用户ID
      * @return 用户对象信息
      */
-    public SysUser selectUserById(Long userId);
+    default SysUser selectUserById(Long userId) {
+        return selectOneById(userId);
+    }
 
     /**
      * 新增用户信息
@@ -62,7 +70,9 @@ public interface SysUserMapper extends BaseMapper<SysUser>
      * @param user 用户信息
      * @return 结果
      */
-    public int insertUser(SysUser user);
+    default int insertUser(SysUser user) {
+        return insertSelective(user);
+    }
 
     /**
      * 修改用户信息
@@ -70,7 +80,9 @@ public interface SysUserMapper extends BaseMapper<SysUser>
      * @param user 用户信息
      * @return 结果
      */
-    public int updateUser(SysUser user);
+    default int updateUser(SysUser user) {
+        return update(user);
+    }
 
     /**
      * 修改用户头像
@@ -78,6 +90,8 @@ public interface SysUserMapper extends BaseMapper<SysUser>
      * @param userName 用户名
      * @param avatar 头像地址
      * @return 结果
+     *
+     *  		update sys_user set avatar = #{avatar} where user_name = #{userName}
      */
     public int updateUserAvatar(@Param("userName") String userName, @Param("avatar") String avatar);
 
@@ -87,6 +101,8 @@ public interface SysUserMapper extends BaseMapper<SysUser>
      * @param userName 用户名
      * @param password 密码
      * @return 结果
+     *
+     *  		update sys_user set password = #{password} where user_name = #{userName}
      */
     public int resetUserPwd(@Param("userName") String userName, @Param("password") String password);
 
@@ -95,6 +111,8 @@ public interface SysUserMapper extends BaseMapper<SysUser>
      * 
      * @param userId 用户ID
      * @return 结果
+     *
+     *  		update sys_user set del_flag = '2' where user_id = #{userId}
      */
     public int deleteUserById(Long userId);
 
@@ -103,6 +121,13 @@ public interface SysUserMapper extends BaseMapper<SysUser>
      * 
      * @param userIds 需要删除的用户ID
      * @return 结果
+     *
+     *  	<delete id="deleteUserByIds" parameterType="Long">
+     *  		update sys_user set del_flag = '2' where user_id in
+     *  		<foreach collection="array" item="userId" open="(" separator="," close=")">
+     *  			#{userId}
+     *         </foreach>
+     *  	</delete>
      */
     public int deleteUserByIds(Long[] userIds);
 
@@ -111,6 +136,10 @@ public interface SysUserMapper extends BaseMapper<SysUser>
      * 
      * @param userName 用户名称
      * @return 结果
+     *
+     * 	<select id="checkUserNameUnique" parameterType="String" resultMap="SysUserResult">
+     * 		select user_id, user_name from sys_user where user_name = #{userName} and del_flag = '0' limit 1
+     * 	</select>
      */
     public SysUser checkUserNameUnique(String userName);
 
@@ -119,6 +148,10 @@ public interface SysUserMapper extends BaseMapper<SysUser>
      *
      * @param phonenumber 手机号码
      * @return 结果
+     *
+     * 	<select id="checkPhoneUnique" parameterType="String" resultMap="SysUserResult">
+     * 		select user_id, phonenumber from sys_user where phonenumber = #{phonenumber} and del_flag = '0' limit 1
+     * 	</select>
      */
     public SysUser checkPhoneUnique(String phonenumber);
 
@@ -127,6 +160,10 @@ public interface SysUserMapper extends BaseMapper<SysUser>
      *
      * @param email 用户邮箱
      * @return 结果
+     *
+     * 	<select id="checkEmailUnique" parameterType="String" resultMap="SysUserResult">
+     * 		select user_id, email from sys_user where email = #{email} and del_flag = '0' limit 1
+     * 	</select>
      */
     public SysUser checkEmailUnique(String email);
 }
